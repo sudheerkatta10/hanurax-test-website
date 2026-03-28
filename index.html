@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hanurax — Build Faster. Scale Smarter. Drive Real Growth.</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -559,17 +560,17 @@
 
           <div style="margin-bottom: 20px;">
             <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 9px; letter-spacing: 0.03em; text-transform: uppercase;">Name</label>
-            <input type="text" class="form-input" placeholder="Your full name" required>
+            <input type="text" name="name" class="form-input" placeholder="Your full name" required>
           </div>
 
           <div style="margin-bottom: 20px;">
             <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 9px; letter-spacing: 0.03em; text-transform: uppercase;">Email</label>
-            <input type="email" class="form-input" placeholder="you@company.com" required>
+            <input type="email" name="email" class="form-input" placeholder="you@company.com" required>
           </div>
 
           <div style="margin-bottom: 30px;">
             <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 9px; letter-spacing: 0.03em; text-transform: uppercase;">Message</label>
-            <textarea class="form-input" placeholder="Tell us about your project..." rows="5" required style="resize: vertical; min-height: 120px;"></textarea>
+            <textarea name="message" class="form-input" placeholder="Tell us about your project..." rows="5" required style="resize: vertical; min-height: 120px;"></textarea>
           </div>
 
           <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-size: 0.93rem; border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600;">
@@ -620,23 +621,37 @@
     document.getElementById('mobile-menu').classList.remove('open');
   }
 
+  // ── EmailJS ────────────────────────────────────────────────────
+  emailjs.init('N52WJTfv0QZqoUsuq');
+
   // ── Form submit ────────────────────────────────────────────────
   function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
     const origBg    = btn.style.background;
     const origColor = btn.style.color;
-    btn.textContent = 'Message Sent!';
-    btn.style.background = '#3a6b4a';
-    btn.style.color = '#e8dfc8';
+    btn.textContent = 'Sending...';
     btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = 'Send Message';
-      btn.style.background = origBg;
-      btn.style.color = origColor;
-      btn.disabled = false;
-      e.target.reset();
-    }, 3200);
+
+    emailjs.sendForm('service_3lqdrcp', 'template_cb92t07', e.target)
+      .then(() => {
+        btn.textContent = 'Message Sent!';
+        btn.style.background = '#3a6b4a';
+        btn.style.color = '#e8dfc8';
+        setTimeout(() => {
+          btn.textContent = 'Send Message';
+          btn.style.background = origBg;
+          btn.style.color = origColor;
+          btn.disabled = false;
+          e.target.reset();
+        }, 3200);
+      })
+      .catch(() => {
+        btn.textContent = 'Failed — Try Again';
+        btn.style.background = '#8b2020';
+        btn.style.color = '#e8dfc8';
+        btn.disabled = false;
+      });
   }
 </script>
 

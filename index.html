@@ -267,6 +267,9 @@
   <div style="position: absolute; top: -220px; right: -180px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(232,223,200,0.042) 0%, transparent 70%); pointer-events: none;"></div>
   <div style="position: absolute; bottom: -80px; left: -120px; width: 440px; height: 440px; border-radius: 50%; background: radial-gradient(circle, rgba(232,223,200,0.030) 0%, transparent 70%); pointer-events: none;"></div>
 
+  <!-- Bottom fade — blends hero into the next section -->
+  <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 220px; background: linear-gradient(to bottom, transparent, var(--bg-base)); pointer-events: none; z-index: 2;"></div>
+
   <div style="max-width: 1200px; margin: 0 auto; padding: 88px 28px 80px; position: relative; z-index: 1; width: 100%;">
 
     <!-- Badge -->
@@ -316,12 +319,12 @@
   </div>
 </section>
 
-<div class="divider"></div>
-
 
 <!-- ═══════════════════════════════════════ ABOUT ═══════════════════════════════════════ -->
-<section id="about" style="padding: 104px 28px; max-width: 1200px; margin: 0 auto;">
-  <div class="two-col">
+<section id="about" style="padding: 104px 28px; max-width: 1200px; margin: 0 auto; position: relative;">
+  <!-- Subtle ambient glow carrying over from hero -->
+  <div style="position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 800px; height: 400px; background: radial-gradient(ellipse at center, rgba(232,223,200,0.028) 0%, transparent 70%); pointer-events: none; z-index: 0;"></div>
+  <div class="two-col" style="position: relative; z-index: 1;">
 
     <!-- Visual card -->
     <div class="fade-up">
@@ -509,7 +512,9 @@
 
 
 <!-- ═══════════════════════════════════════ CONTACT ═══════════════════════════════════════ -->
-<section id="contact" style="padding: 104px 28px; max-width: 1200px; margin: 0 auto;">
+<section id="contact" style="padding: 104px 28px; position: relative; overflow: hidden;">
+  <div id="contact-dotted" style="position: absolute; inset: 0; pointer-events: none; z-index: 0;"></div>
+  <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
   <div class="two-col" style="align-items: start;">
 
     <!-- Info -->
@@ -582,12 +587,14 @@
     </div>
 
   </div>
+  </div>
 </section>
 
 
 <!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
-<footer style="border-top: 1px solid var(--border); padding: 36px 28px;">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+<footer style="border-top: 1px solid var(--border); padding: 36px 28px; position: relative; overflow: hidden;">
+  <div id="footer-dotted" style="position: absolute; inset: 0; pointer-events: none; z-index: 0;"></div>
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; position: relative; z-index: 1;">
 
     <a href="#" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
       <img src="assests/hanuraxlogogodaddy.jpeg" alt="Hanurax" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover;">
@@ -717,6 +724,148 @@
     posAttr.needsUpdate = true;
     renderer.render(scene, camera);
     count += 0.1;
+  }
+
+  animate();
+
+  window.addEventListener('resize', function () {
+    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+  });
+})();
+</script>
+
+<!-- ═══════════════════════ CONTACT DOTTED SURFACE (Three.js) ═══════════════════════ -->
+<script>
+(function () {
+  var container = document.getElementById('contact-dotted');
+  if (!container || typeof THREE === 'undefined') return;
+
+  var SEPARATION = 150, AMOUNTX = 40, AMOUNTY = 60;
+
+  var scene = new THREE.Scene();
+
+  var camera = new THREE.PerspectiveCamera(60, container.offsetWidth / container.offsetHeight, 1, 10000);
+  camera.position.set(0, 355, 1220);
+
+  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
+
+  var positions = [];
+  var colors    = [];
+  for (var ix = 0; ix < AMOUNTX; ix++) {
+    for (var iy = 0; iy < AMOUNTY; iy++) {
+      positions.push(ix * SEPARATION - (AMOUNTX * SEPARATION) / 2, 0, iy * SEPARATION - (AMOUNTY * SEPARATION) / 2);
+      colors.push(0.91, 0.87, 0.78);
+    }
+  }
+
+  var geometry = new THREE.BufferGeometry();
+  var posAttr  = new THREE.Float32BufferAttribute(positions, 3);
+  geometry.setAttribute('position', posAttr);
+  geometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors, 3));
+
+  var material = new THREE.PointsMaterial({
+    size: 4,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.45,
+    sizeAttenuation: true,
+  });
+
+  var points = new THREE.Points(geometry, material);
+  scene.add(points);
+
+  var count = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    var arr = posAttr.array;
+    var i = 0;
+    for (var ix = 0; ix < AMOUNTX; ix++) {
+      for (var iy = 0; iy < AMOUNTY; iy++) {
+        arr[i * 3 + 1] = Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
+        i++;
+      }
+    }
+    posAttr.needsUpdate = true;
+    renderer.render(scene, camera);
+    count += 0.04;
+  }
+
+  animate();
+
+  window.addEventListener('resize', function () {
+    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+  });
+})();
+</script>
+
+<!-- ═══════════════════════ FOOTER DOTTED SURFACE (Three.js) ═══════════════════════ -->
+<script>
+(function () {
+  var container = document.getElementById('footer-dotted');
+  if (!container || typeof THREE === 'undefined') return;
+
+  var SEPARATION = 150, AMOUNTX = 40, AMOUNTY = 60;
+
+  var scene = new THREE.Scene();
+
+  var camera = new THREE.PerspectiveCamera(60, container.offsetWidth / container.offsetHeight, 1, 10000);
+  camera.position.set(0, 355, 1220);
+
+  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
+
+  var positions = [];
+  var colors    = [];
+  for (var ix = 0; ix < AMOUNTX; ix++) {
+    for (var iy = 0; iy < AMOUNTY; iy++) {
+      positions.push(ix * SEPARATION - (AMOUNTX * SEPARATION) / 2, 0, iy * SEPARATION - (AMOUNTY * SEPARATION) / 2);
+      colors.push(0.91, 0.87, 0.78);
+    }
+  }
+
+  var geometry = new THREE.BufferGeometry();
+  var posAttr  = new THREE.Float32BufferAttribute(positions, 3);
+  geometry.setAttribute('position', posAttr);
+  geometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors, 3));
+
+  var material = new THREE.PointsMaterial({
+    size: 4,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.45,
+    sizeAttenuation: true,
+  });
+
+  var points = new THREE.Points(geometry, material);
+  scene.add(points);
+
+  var count = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    var arr = posAttr.array;
+    var i = 0;
+    for (var ix = 0; ix < AMOUNTX; ix++) {
+      for (var iy = 0; iy < AMOUNTY; iy++) {
+        arr[i * 3 + 1] = Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
+        i++;
+      }
+    }
+    posAttr.needsUpdate = true;
+    renderer.render(scene, camera);
+    count += 0.04;
   }
 
   animate();

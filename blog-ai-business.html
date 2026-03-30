@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI in Business: Practical Use Cases That Deliver Results — Hanurax</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base:        #0C0C0A;
+      --bg-elevated:    #141410;
+      --bg-floating:    #1C1C17;
+      --accent:         #E8DFC8;
+      --accent-dim:     #C4B99A;
+      --text-primary:   #F0E8D4;
+      --text-secondary: #7A7468;
+      --border:         rgba(232, 223, 200, 0.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-base); color: var(--text-primary);
+      font-family: 'Inter', sans-serif; line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.4;
+    }
+    .font-display { font-family: 'Playfair Display', serif; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12,12,10,0.88);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 28px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; }
+    .nav-logo span {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      font-weight: 600; color: var(--accent); letter-spacing: -0.01em;
+    }
+    .back-link {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-secondary); font-size: 0.875rem; font-weight: 500;
+      text-decoration: none; transition: color 0.2s ease;
+    }
+    .back-link:hover { color: var(--text-primary); }
+
+    .article-hero {
+      height: 340px;
+      background: linear-gradient(135deg, #14141c 0%, #1c1c26 60%, #14141e 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .article-hero .grid-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(232,223,200,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,223,200,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .article-hero svg { opacity: 0.18; position: relative; z-index: 1; }
+    .hero-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,223,200,0.055) 0%, transparent 70%);
+    }
+
+    .article-wrap { max-width: 760px; margin: 0 auto; padding: 64px 28px 120px; }
+    .article-tag {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--accent-dim); font-weight: 600; margin-bottom: 20px;
+    }
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700;
+      letter-spacing: -0.025em; color: var(--text-primary); line-height: 1.15; margin-bottom: 24px;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 20px;
+      color: var(--text-secondary); font-size: 0.83rem; margin-bottom: 52px;
+      padding-bottom: 36px; border-bottom: 1px solid var(--border);
+    }
+    .article-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .article-body h2 {
+      font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text-primary); margin: 52px 0 18px; line-height: 1.25;
+    }
+    .article-body h3 { font-size: 1.07rem; font-weight: 600; color: var(--text-primary); margin: 32px 0 12px; }
+    .article-body p { color: #B8B0A0; font-size: 1rem; line-height: 1.85; margin-bottom: 22px; }
+    .article-body ul, .article-body ol { color: #B8B0A0; font-size: 1rem; line-height: 1.85; margin: 0 0 22px 24px; }
+    .article-body li { margin-bottom: 10px; }
+    .article-body strong { color: var(--text-primary); font-weight: 600; }
+
+    .callout {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-dim); border-radius: 12px;
+      padding: 24px 28px; margin: 36px 0;
+    }
+    .callout p { margin-bottom: 0; color: var(--accent-dim); font-size: 0.97rem; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 40px 0; }
+    @media (max-width: 600px) { .stat-row { grid-template-columns: 1fr; } }
+    .stat-box {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 20px; text-align: center;
+    }
+    .stat-box .num {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700;
+      color: var(--accent); letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px;
+    }
+    .stat-box .label { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+
+    .use-case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 36px 0; }
+    @media (max-width: 600px) { .use-case-grid { grid-template-columns: 1fr; } }
+    .use-case-card {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 22px;
+    }
+    .use-case-card .uc-title { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+    .use-case-card .uc-desc { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .article-cta {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px; text-align: center; margin-top: 72px;
+    }
+    .article-cta h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.7rem;
+      font-weight: 700; color: var(--text-primary); margin-bottom: 14px;
+    }
+    .article-cta p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 28px; }
+    .btn-primary {
+      display: inline-block; background: var(--accent); color: #0C0C0A;
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.01em;
+      padding: 14px 32px; border-radius: 10px; text-decoration: none;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
+      box-shadow: 0 4px 22px rgba(232,223,200,0.22);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(232,223,200,0.32); }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: rgba(232,223,200,0.14); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assests/hanuraxlogogodaddy.jpeg" alt="Hanurax logo">
+      <span>Hanurax</span>
+    </a>
+    <a href="index.html#insights" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back to Insights
+    </a>
+  </div>
+</nav>
+
+<div class="article-hero">
+  <div class="grid-overlay"></div>
+  <div class="hero-glow"></div>
+  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+  </svg>
+</div>
+
+<div class="article-wrap">
+  <div class="article-tag">AI</div>
+  <h1 class="article-title">AI in Business: Practical Use Cases That Deliver Results</h1>
+  <div class="article-meta">
+    <span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      March 2025
+    </span>
+    <span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      10 min read
+    </span>
+  </div>
+
+  <div class="article-body">
+
+    <p>AI has suffered from a perception problem. On one side, breathless proclamations that it will change everything overnight. On the other, cynicism from businesses that tried generic AI tools and saw no measurable return. The truth, as always, is more specific than either extreme.</p>
+
+    <p>The businesses getting real value from AI are not the ones chasing the latest models or deploying chatbots on every surface. They are the ones identifying a specific, high-value problem, applying AI precisely to that problem, and measuring the result. This article cuts through the noise and shows you where AI is delivering genuine business outcomes today.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="num">40%</div>
+        <div class="label">productivity gain reported by knowledge workers using AI assistants daily</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">70%</div>
+        <div class="label">reduction in first-response time for customer support using AI triage</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">4.4×</div>
+        <div class="label">ROI reported by companies with mature AI adoption vs early-stage</div>
+      </div>
+    </div>
+
+    <h2>Where AI Is Delivering Real Results Right Now</h2>
+
+    <div class="use-case-grid">
+      <div class="use-case-card">
+        <div class="uc-title">Customer Support Triage</div>
+        <div class="uc-desc">AI classifies and routes incoming support tickets, handles common queries autonomously, and escalates complex issues to the right agent — with full context.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="uc-title">Sales Intelligence</div>
+        <div class="uc-desc">AI analyses call recordings, emails, and CRM data to surface buying signals, flag at-risk deals, and suggest next actions for each opportunity in the pipeline.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="uc-title">Content at Scale</div>
+        <div class="uc-desc">AI drafts first versions of marketing copy, product descriptions, and internal documentation — freeing writers to focus on strategy and refinement.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="uc-title">Document Intelligence</div>
+        <div class="uc-desc">AI extracts key information from contracts, invoices, and reports — eliminating manual data entry and reducing processing time from hours to seconds.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="uc-title">Predictive Analytics</div>
+        <div class="uc-desc">AI models trained on your historical data predict churn, demand, inventory needs, and revenue — enabling proactive decisions rather than reactive ones.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="uc-title">Developer Productivity</div>
+        <div class="uc-desc">AI-assisted coding tools reduce time spent on boilerplate, debugging, and documentation — letting engineers focus on complex, high-value problems.</div>
+      </div>
+    </div>
+
+    <h2>The Honest Assessment: Where AI Still Struggles</h2>
+
+    <p>Deploying AI without understanding its limitations is how businesses end up with expensive, embarrassing failures. Here is a clear-eyed view of where AI still falls short:</p>
+
+    <h3>Complex Reasoning Under Novel Conditions</h3>
+    <p>Current AI models are excellent at pattern matching within the distribution of their training data. Ask them something genuinely novel or that requires multi-step logical reasoning with real-world consequences, and accuracy drops significantly. High-stakes decisions — legal, medical, financial — still need human expert oversight.</p>
+
+    <h3>Long-Term Consistency</h3>
+    <p>AI models can contradict themselves across a long conversation or produce outputs that are inconsistent with earlier responses. For applications where consistency is critical — brand voice, compliance language, technical specifications — you need robust review and validation processes.</p>
+
+    <h3>Hallucination</h3>
+    <p>AI models can generate plausible-sounding but factually incorrect information with complete confidence. Any AI output that will be presented as fact to customers or stakeholders needs a verification step — especially for anything involving data, citations, or technical claims.</p>
+
+    <div class="callout">
+      <p><strong>The key insight:</strong> AI works best as an amplifier of human capability, not a replacement for human judgement. The highest-ROI applications keep humans in the loop for decisions that matter, while automating the high-volume, lower-stakes work that consumes disproportionate time.</p>
+    </div>
+
+    <h2>A Framework for Evaluating AI Opportunities</h2>
+
+    <p>Before investing in any AI initiative, run it through these four questions:</p>
+
+    <ol>
+      <li><strong>Is there sufficient data?</strong> AI models learn from examples. If you do not have enough historical data for the problem you want to solve, the model will not perform well. Rule of thumb: you need thousands of examples minimum for custom model training, and dozens for prompt-based approaches.</li>
+      <li><strong>What is the cost of an error?</strong> AI is probabilistic — it will sometimes be wrong. If the cost of an error is low (a slightly awkward email draft), AI is a great fit. If the cost of an error is high (incorrect medical diagnosis, regulatory violation), you need human review integrated into the workflow.</li>
+      <li><strong>Is the value measurable?</strong> If you cannot measure the outcome before and after AI implementation, you cannot manage the investment. Define your success metric before you start — time saved, error rate reduced, revenue influenced.</li>
+      <li><strong>Can you build a feedback loop?</strong> The best AI implementations improve over time because they capture feedback on their outputs. Design the feedback mechanism into your system from the start.</li>
+    </ol>
+
+    <h2>Practical Starting Points for Different Business Types</h2>
+
+    <h3>Professional Services (Consulting, Legal, Accounting)</h3>
+    <p>Start with document intelligence — AI that reads contracts, financial statements, or client briefs and extracts key information into structured formats. This is low-risk, highly measurable, and delivers immediate time savings for knowledge workers who spend significant time on document review.</p>
+
+    <h3>E-commerce and Retail</h3>
+    <p>Start with personalisation and demand forecasting. AI recommendation engines that surface the right products to the right customer at the right time consistently outperform manual merchandising. Demand forecasting reduces overstock and stockouts — two of the largest cost drivers in retail.</p>
+
+    <h3>SaaS and Technology</h3>
+    <p>Start with churn prediction. Train a model on your historical customer data — usage patterns, support tickets, billing history — to identify customers at risk of cancellation 60–90 days before they churn. This gives your customer success team a prioritised list to focus on and turns reactive retention into proactive account management.</p>
+
+    <h3>Operations-Heavy Businesses</h3>
+    <p>Start with anomaly detection. AI that monitors your operational data in real time and flags deviations from expected patterns — equipment performance, supply chain metrics, quality control — catches problems earlier and at lower cost than human monitoring alone.</p>
+
+    <h2>Implementation: The Approach That Works</h2>
+
+    <p>The most common failure mode in AI projects is starting too big. Businesses attempt to overhaul an entire function with AI simultaneously, find the complexity overwhelming, and abandon the initiative partway through with nothing to show for it.</p>
+
+    <p>The approach that works is narrower and faster:</p>
+    <ul>
+      <li>Pick one specific problem with a clear, measurable output</li>
+      <li>Run a time-boxed pilot (4–8 weeks) with a small, motivated team</li>
+      <li>Measure ruthlessly against your pre-defined success metric</li>
+      <li>If successful, systematise and scale; if not, document the learning and pivot</li>
+    </ul>
+
+    <p>The businesses that are winning with AI in 2025 are not the ones that bet everything on a single massive transformation. They are the ones that run many small experiments, double down on what works, and build compounding capability over time.</p>
+
+    <div class="callout">
+      <p>The question is not whether AI is relevant to your business. It almost certainly is. The question is where to start. Start specific, measure everything, and let results guide your next step.</p>
+    </div>
+
+  </div>
+
+  <div class="article-cta">
+    <h3>Ready to apply AI to your business?</h3>
+    <p>We identify the right AI opportunities for your specific situation and build the systems to realise them.</p>
+    <a href="index.html#contact" class="btn-primary">Start a Conversation</a>
+  </div>
+</div>
+
+</body>
+</html>
